@@ -1,16 +1,41 @@
-<div class="row">
-  <div class="col">
-    <ol class="list-group">
-      <li *ngFor="let todo of todos" class="list-group-item">
-        {{todo.name}} : {{todo.content}}
-        <i (click)="deleteTodo(todo)" class="fa fa-trash" aria-hidden="true"></i>
-      </li>
-    </ol>
-  </div>
-  <div class="col">
-    name: <input [(ngModel)]="todo.name" type="text" class="form-control">
-    content: <input [(ngModel)]="todo.content" type="text" class="form-control">
-    <button (click)="addTodo()" [disabled]="!todo.name.trim() || !todo.content.trim()"
-      class="btn btn-primary m-2">add</button>
-  </div>
+<div>
+  <!-- Formulaire d'ajout -->
+  <input type="text" placeholder="Name" [(ngModel)]="newName">
+  <input type="text" placeholder="Content" [(ngModel)]="newContent">
+  <button (click)="addTodo()" [disabled]="!newName.trim() || !newContent.trim()">Add</button>
+</div>
+
+<div class="waiting">
+  <h2>Waiting</h2>
+  <ul>
+    <li *ngFor="let todo of todoService.waitingTodos()">
+      {{ todo.name }} - {{ todo.content }}
+      <button (click)="changeStatus(todo.id, 'in progress')">Start</button>
+      <button (click)="changeStatus(todo.id, 'done')">Done</button>
+      <button (click)="deleteTodo(todo.id)">Delete</button>
+    </li>
+  </ul>
+</div>
+
+<div class="in-progress">
+  <h2>In Progress Todos</h2>
+  <ul>
+    <li *ngFor="let todo of todoService.inProgressTodos()">
+      {{ todo.name }} - {{ todo.content }}
+      <button (click)="changeStatus(todo.id, 'waiting')">Back to Waiting</button>
+      <button (click)="changeStatus(todo.id, 'done')">Done</button>
+      <button (click)="deleteTodo(todo.id)">Delete</button>
+    </li>
+  </ul>
+</div>
+
+<div class="done">
+  <h2>Done Todos</h2>
+  <ul>
+    <li *ngFor="let todo of todoService.doneTodos()">
+      {{ todo.name }} - {{ todo.content }}
+      <button (click)="changeStatus(todo.id, 'in progress')">Reopen</button>
+      <button (click)="deleteTodo(todo.id)">Delete</button>
+    </li>
+  </ul>
 </div>

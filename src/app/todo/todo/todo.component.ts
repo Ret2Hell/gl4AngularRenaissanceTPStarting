@@ -1,25 +1,35 @@
 import { Component } from '@angular/core';
-import { Todo } from '../model/todo';
 import { TodoService } from '../service/todo.service';
+import { TodoStatus } from '../model/todo';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-todo',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './todo.component.html',
-  styleUrls: ['./todo.component.css'],
-  providers: [TodoService],
+  styleUrl: './todo.component.css'
 })
 export class TodoComponent {
-  todos: Todo[] = [];
-  todo = new Todo();
-  constructor(private todoService: TodoService) {
-    this.todos = this.todoService.getTodos();
-  }
+  newName: string = '';
+  newContent: string = '';
+
+  constructor(public todoService: TodoService) {}
+
   addTodo() {
-    this.todoService.addTodo(this.todo);
-    this.todo = new Todo();
+    if (this.newName.trim() && this.newContent.trim()) {
+      this.todoService.addTodo(this.newName, this.newContent);
+      this.newName = '';
+      this.newContent = '';
+    }
   }
 
-  deleteTodo(todo: Todo) {
-    this.todoService.deleteTodo(todo);
+  changeStatus(id: number, newStatus: TodoStatus) {
+    this.todoService.changeStatus(id, newStatus);
+  }
+
+  deleteTodo(id: number) {
+    this.todoService.deleteTodo(id);
   }
 }

@@ -1,0 +1,29 @@
+div {
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+
+h2 {
+  padding: 5px;
+  margin: 0;
+}
+
+.waiting { background-color: #ff0000; } /* Rouge pour Waiting */
+.in-progress { background-color: #ffa500; } /* Orange pour In Progress */
+.done { background-color: #27c827; } /* Vert pour Done */
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  margin: 5px 0;
+  padding: 5px;
+}
+
+button {
+  margin-left: 5px;
+  padding: 2px 10px;
+}

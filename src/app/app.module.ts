@@ -77,7 +77,6 @@ import { SliderComponent } from "./rxjs/slider/slider.component";
     NgclassComponent,
     HighlightDirective,
     Btc2usdPipe,
-    TodoComponent,
     NavbarComponent,
     FrontComponent,
     AdminComponent,

@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  signal,
+  inject,
+} from '@angular/core';
 import { TodoService } from '../service/todo.service';
 import { TodoStatus } from '../model/todo';
 import { CommonModule } from '@angular/common';
@@ -13,10 +18,9 @@ import { FormsModule } from '@angular/forms';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TodoComponent {
+  todoService = inject(TodoService);
   newName = signal('');
   newContent = signal('');
-
-  constructor(public todoService: TodoService) {}
 
   addTodo() {
     const name = this.newName().trim();

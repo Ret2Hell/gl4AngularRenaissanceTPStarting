@@ -1,11 +1,15 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal, computed } from '@angular/core';
 import { Cv } from '../model/cv';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EmbaucheService {
-  private embauchees: Cv[] = [];
+  private embauchees = signal<Cv[]>([]);
+
+  embaucheesCount = computed(() => this.embauchees().length);
+
+  hasEmbauchees = computed(() => this.embauchees().length > 0);
 
   constructor() {}
 
@@ -17,7 +21,7 @@ export class EmbaucheService {
    *
    */
   getEmbauchees(): Cv[] {
-    return this.embauchees;
+    return this.embauchees();
   }
 
   /**
@@ -29,8 +33,32 @@ export class EmbaucheService {
    * @returns boolean
    */
   embauche(cv: Cv): boolean {
-    if (this.embauchees.indexOf(cv) == -1) {
-      this.embauchees.push(cv);
+    const currentEmbauchees = this.embauchees();
+    const isAlreadyEmbauched = currentEmbauchees.some(
+      (embauche) => embauche.id === cv.id
+    );
+
+    if (!isAlreadyEmbauched) {
+      this.embauchees.set([...currentEmbauchees, cv]);
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Retire une personne de la liste des embauchées
+   *
+   * @param cv : Cv
+   * @returns boolean
+   */
+  desembaucher(cv: Cv): boolean {
+    const currentEmbauchees = this.embauchees();
+    const filteredEmbauchees = currentEmbauchees.filter(
+      (embauche) => embauche.id !== cv.id
+    );
+
+    if (filteredEmbauchees.length !== currentEmbauchees.length) {
+      this.embauchees.set(filteredEmbauchees);
       return true;
     }
     return false;

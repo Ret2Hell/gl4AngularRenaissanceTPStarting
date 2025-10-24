@@ -15,11 +15,7 @@ interface CalculationResults {
   unitPrice: number;
   quantity: number;
   tva: number;
-  subtotal: number;
-  discount: number;
   discountAmount: number;
-  discountedSubtotal: number;
-  tvaAmount: number;
   ttcPrice: number;
   ttcPricePerUnit: number;
 }
@@ -93,11 +89,7 @@ export class TtcCalculatorComponent implements OnInit, OnDestroy {
           unitPrice,
           quantity,
           tva,
-          subtotal,
-          discount,
           discountAmount,
-          discountedSubtotal,
-          tvaAmount,
           ttcPrice,
           ttcPricePerUnit
         } as CalculationResults;
@@ -115,17 +107,5 @@ export class TtcCalculatorComponent implements OnInit, OnDestroy {
       return 20; 
     }
     return 0; 
-  }
-
-  resetForm(): void {
-    this.calculatorForm.patchValue({
-      unitPrice: 0,
-      quantity: 1,
-      tva: 18
-    });
-  }
-
-  get isFormValid(): boolean {
-    return this.calculatorForm.valid;
   }
 }

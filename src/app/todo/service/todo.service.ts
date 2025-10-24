@@ -1,55 +1,41 @@
-import { Injectable, inject } from '@angular/core';
-import { Todo } from '../model/todo';
-import { LoggerService } from '../../services/logger.service';
-
-let n = 1;
+import { Injectable, signal, computed } from '@angular/core';
+import { Todo, TodoStatus } from '../model/todo';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TodoService {
-  private loggerService = inject(LoggerService);
+  private todos = signal<Todo[]>([]);
+  private nextId = signal(1);
 
-  private todos: Todo[] = [];
+  waitingTodos = computed(() =>
+    this.todos().filter((todo) => todo.status === 'waiting')
+  );
+  inProgressTodos = computed(() =>
+    this.todos().filter((todo) => todo.status === 'in progress')
+  );
+  doneTodos = computed(() =>
+    this.todos().filter((todo) => todo.status === 'done')
+  );
 
-  /**
-   * elle retourne la liste des todos
-   *
-   * @returns Todo[]
-   */
-  getTodos(): Todo[] {
-    return this.todos;
+  //Ajouter un todo
+  addTodo(name: string, content: string) {
+    const newTodo = new Todo(this.nextId(), name, content);
+    this.todos.update((current) => [...current, newTodo]);
+    this.nextId.update((id) => id + 1);
   }
 
-  /**
-   *Elle permet d'ajouter un todo
-   *
-   * @param todo: Todo
-   *
-   */
-  addTodo(todo: Todo): void {
-    this.todos.push(todo);
+  //Changer le statut d'un todo
+  changeStatus(id: number, newStatus: TodoStatus) {
+    this.todos.update((current) =>
+      current.map((todo) =>
+        todo.id === id ? { ...todo, status: newStatus } : todo
+      )
+    );
   }
 
-  /**
-   * Delete le todo s'il existe
-   *
-   * @param todo: Todo
-   * @returns boolean
-   */
-  deleteTodo(todo: Todo): boolean {
-    const index = this.todos.indexOf(todo);
-    if (index > -1) {
-      this.todos.splice(index, 1);
-      return true;
-    }
-    return false;
-  }
-
-  /**
-   * Logger la liste des todos
-   */
-  logTodos() {
-    this.loggerService.logger(this.todos);
+  // Supprimer un todo
+  deleteTodo(id: number) {
+    this.todos.update((current) => current.filter((todo) => todo.id !== id));
   }
 }

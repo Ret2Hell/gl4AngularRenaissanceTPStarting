@@ -1,18 +1,137 @@
-<div class="row">
-  <div class="col">
-    <ol class="list-group">
-      @for (todo of todos; track todo) {
-        <li class="list-group-item">
-          {{todo.name}} : {{todo.content}}
-          <i (click)="deleteTodo(todo)" class="fa fa-trash" aria-hidden="true"></i>
-        </li>
-      }
-    </ol>
+<div class="todo-container">
+  <div class="add-todo-form">
+    <!-- Formulaire d'ajout -->
+    <input
+      class="form-control form-input"
+      type="text"
+      placeholder="name"
+      [value]="newName()"
+      (input)="newName.set($any($event.target).value)"
+    />
+    <input
+      class="form-control form-input"
+      type="text"
+      placeholder="content"
+      [value]="newContent()"
+      (input)="newContent.set($any($event.target).value)"
+    />
+    <button
+      class="btn btn-danger"
+      (click)="addTodo()"
+      [disabled]="!isFormValid()"
+    >
+      Add
+    </button>
   </div>
-  <div class="col">
-    name: <input [(ngModel)]="todo.name" type="text" class="form-control">
-    content: <input [(ngModel)]="todo.content" type="text" class="form-control">
-    <button (click)="addTodo()" [disabled]="!todo.name.trim() || !todo.content.trim()"
-    class="btn btn-primary m-2">add</button>
+
+  <div class="todo-lists">
+    <div
+      class="todo-item alert alert-secondary"
+      (click)="handleTodoAction($event)"
+    >
+      <h2>Waiting</h2>
+      <ul>
+        @for (todo of todoService.waitingTodos(); track todo.id) {
+        <li>
+          <span class="todo-text">{{ todo.name }} - {{ todo.content }}</span>
+          <div class="button-group">
+            <button
+              class="btn btn-sm btn-primary"
+              [attr.data-action]="'changeStatus'"
+              [attr.data-id]="todo.id"
+              [attr.data-status]="'in progress'"
+            >
+              Start
+            </button>
+            <button
+              class="btn btn-sm btn-success"
+              [attr.data-action]="'changeStatus'"
+              [attr.data-id]="todo.id"
+              [attr.data-status]="'done'"
+            >
+              Done
+            </button>
+            <button
+              class="btn btn-sm btn-danger"
+              [attr.data-action]="'delete'"
+              [attr.data-id]="todo.id"
+            >
+              Delete
+            </button>
+          </div>
+        </li>
+        }
+      </ul>
+    </div>
+
+    <div
+      class="todo-item alert alert-warning"
+      (click)="handleTodoAction($event)"
+    >
+      <h2>In Progress Todos</h2>
+      <ul>
+        @for (todo of todoService.inProgressTodos(); track todo.id) {
+        <li>
+          <span class="todo-text">{{ todo.name }} - {{ todo.content }}</span>
+          <div class="button-group">
+            <button
+              class="btn btn-sm btn-secondary"
+              [attr.data-action]="'changeStatus'"
+              [attr.data-id]="todo.id"
+              [attr.data-status]="'waiting'"
+            >
+              Back to Waiting
+            </button>
+            <button
+              class="btn btn-sm btn-success"
+              [attr.data-action]="'changeStatus'"
+              [attr.data-id]="todo.id"
+              [attr.data-status]="'done'"
+            >
+              Done
+            </button>
+            <button
+              class="btn btn-sm btn-danger"
+              [attr.data-action]="'delete'"
+              [attr.data-id]="todo.id"
+            >
+              Delete
+            </button>
+          </div>
+        </li>
+        }
+      </ul>
+    </div>
+
+    <div
+      class="todo-item alert alert-success"
+      (click)="handleTodoAction($event)"
+    >
+      <h2>Done Todos</h2>
+      <ul>
+        @for (todo of todoService.doneTodos(); track todo.id) {
+        <li>
+          <span class="todo-text">{{ todo.name }} - {{ todo.content }}</span>
+          <div class="button-group">
+            <button
+              class="btn btn-sm btn-warning"
+              [attr.data-action]="'changeStatus'"
+              [attr.data-id]="todo.id"
+              [attr.data-status]="'in progress'"
+            >
+              Reopen
+            </button>
+            <button
+              class="btn btn-sm btn-danger"
+              [attr.data-action]="'delete'"
+              [attr.data-id]="todo.id"
+            >
+              Delete
+            </button>
+          </div>
+        </li>
+        }
+      </ul>
+    </div>
   </div>
 </div>

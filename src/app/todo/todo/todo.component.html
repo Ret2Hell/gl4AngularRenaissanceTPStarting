@@ -5,18 +5,20 @@
       class="form-control form-input"
       type="text"
       placeholder="name"
-      [(ngModel)]="newName"
+      [value]="newName()"
+      (input)="newName.set($any($event.target).value)"
     />
     <input
       class="form-control form-input"
       type="text"
       placeholder="content"
-      [(ngModel)]="newContent"
+      [value]="newContent()"
+      (input)="newContent.set($any($event.target).value)"
     />
     <button
       class="btn btn-danger"
       (click)="addTodo()"
-      [disabled]="!newName.trim() || !newContent.trim()"
+      [disabled]="!isFormValid()"
     >
       Add
     </button>
@@ -26,7 +28,8 @@
     <div class="todo-item alert alert-secondary">
       <h2>Waiting</h2>
       <ul>
-        <li *ngFor="let todo of todoService.waitingTodos()">
+        @for (todo of todoService.waitingTodos(); track todo.id) {
+        <li>
           <span class="todo-text">{{ todo.name }} - {{ todo.content }}</span>
           <div class="button-group">
             <button
@@ -46,13 +49,15 @@
             </button>
           </div>
         </li>
+        }
       </ul>
     </div>
 
     <div class="todo-item alert alert-warning">
       <h2>In Progress Todos</h2>
       <ul>
-        <li *ngFor="let todo of todoService.inProgressTodos()">
+        @for (todo of todoService.inProgressTodos(); track todo.id) {
+        <li>
           <span class="todo-text">{{ todo.name }} - {{ todo.content }}</span>
           <div class="button-group">
             <button
@@ -72,13 +77,15 @@
             </button>
           </div>
         </li>
+        }
       </ul>
     </div>
 
     <div class="todo-item alert alert-success">
       <h2>Done Todos</h2>
       <ul>
-        <li *ngFor="let todo of todoService.doneTodos()">
+        @for (todo of todoService.doneTodos(); track todo.id) {
+        <li>
           <span class="todo-text">{{ todo.name }} - {{ todo.content }}</span>
           <div class="button-group">
             <button
@@ -92,6 +99,7 @@
             </button>
           </div>
         </li>
+        }
       </ul>
     </div>
   </div>

@@ -42,4 +42,25 @@ export class TodoComponent {
       this.newName().trim().length > 0 && this.newContent().trim().length > 0
     );
   }
+
+  handleTodoAction(event: Event): void {
+    const target = event.target as HTMLElement;
+
+    if (target.tagName !== 'BUTTON') {
+      return;
+    }
+
+    const action = target.getAttribute('data-action');
+    const id = Number(target.getAttribute('data-id'));
+
+    if (action === 'changeStatus') {
+      const status = target.getAttribute('data-status') as
+        | 'waiting'
+        | 'in progress'
+        | 'done';
+      this.changeStatus(id, status);
+    } else if (action === 'delete') {
+      this.deleteTodo(id);
+    }
+  }
 }

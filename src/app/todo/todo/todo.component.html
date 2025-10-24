@@ -25,7 +25,10 @@
   </div>
 
   <div class="todo-lists">
-    <div class="todo-item alert alert-secondary">
+    <div
+      class="todo-item alert alert-secondary"
+      (click)="handleTodoAction($event)"
+    >
       <h2>Waiting</h2>
       <ul>
         @for (todo of todoService.waitingTodos(); track todo.id) {
@@ -34,17 +37,25 @@
           <div class="button-group">
             <button
               class="btn btn-sm btn-primary"
-              (click)="changeStatus(todo.id, 'in progress')"
+              [attr.data-action]="'changeStatus'"
+              [attr.data-id]="todo.id"
+              [attr.data-status]="'in progress'"
             >
               Start
             </button>
             <button
               class="btn btn-sm btn-success"
-              (click)="changeStatus(todo.id, 'done')"
+              [attr.data-action]="'changeStatus'"
+              [attr.data-id]="todo.id"
+              [attr.data-status]="'done'"
             >
               Done
             </button>
-            <button class="btn btn-sm btn-danger" (click)="deleteTodo(todo.id)">
+            <button
+              class="btn btn-sm btn-danger"
+              [attr.data-action]="'delete'"
+              [attr.data-id]="todo.id"
+            >
               Delete
             </button>
           </div>
@@ -53,7 +64,10 @@
       </ul>
     </div>
 
-    <div class="todo-item alert alert-warning">
+    <div
+      class="todo-item alert alert-warning"
+      (click)="handleTodoAction($event)"
+    >
       <h2>In Progress Todos</h2>
       <ul>
         @for (todo of todoService.inProgressTodos(); track todo.id) {
@@ -62,17 +76,25 @@
           <div class="button-group">
             <button
               class="btn btn-sm btn-secondary"
-              (click)="changeStatus(todo.id, 'waiting')"
+              [attr.data-action]="'changeStatus'"
+              [attr.data-id]="todo.id"
+              [attr.data-status]="'waiting'"
             >
               Back to Waiting
             </button>
             <button
               class="btn btn-sm btn-success"
-              (click)="changeStatus(todo.id, 'done')"
+              [attr.data-action]="'changeStatus'"
+              [attr.data-id]="todo.id"
+              [attr.data-status]="'done'"
             >
               Done
             </button>
-            <button class="btn btn-sm btn-danger" (click)="deleteTodo(todo.id)">
+            <button
+              class="btn btn-sm btn-danger"
+              [attr.data-action]="'delete'"
+              [attr.data-id]="todo.id"
+            >
               Delete
             </button>
           </div>
@@ -81,7 +103,10 @@
       </ul>
     </div>
 
-    <div class="todo-item alert alert-success">
+    <div
+      class="todo-item alert alert-success"
+      (click)="handleTodoAction($event)"
+    >
       <h2>Done Todos</h2>
       <ul>
         @for (todo of todoService.doneTodos(); track todo.id) {
@@ -90,11 +115,17 @@
           <div class="button-group">
             <button
               class="btn btn-sm btn-warning"
-              (click)="changeStatus(todo.id, 'in progress')"
+              [attr.data-action]="'changeStatus'"
+              [attr.data-id]="todo.id"
+              [attr.data-status]="'in progress'"
             >
               Reopen
             </button>
-            <button class="btn btn-sm btn-danger" (click)="deleteTodo(todo.id)">
+            <button
+              class="btn btn-sm btn-danger"
+              [attr.data-action]="'delete'"
+              [attr.data-id]="todo.id"
+            >
               Delete
             </button>
           </div>

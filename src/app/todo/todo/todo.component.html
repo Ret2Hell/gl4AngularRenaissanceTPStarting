@@ -1,41 +1,98 @@
-<div>
-  <!-- Formulaire d'ajout -->
-  <input type="text" placeholder="Name" [(ngModel)]="newName">
-  <input type="text" placeholder="Content" [(ngModel)]="newContent">
-  <button (click)="addTodo()" [disabled]="!newName.trim() || !newContent.trim()">Add</button>
-</div>
+<div class="todo-container">
+  <div class="add-todo-form">
+    <!-- Formulaire d'ajout -->
+    <input
+      class="form-control form-input"
+      type="text"
+      placeholder="name"
+      [(ngModel)]="newName"
+    />
+    <input
+      class="form-control form-input"
+      type="text"
+      placeholder="content"
+      [(ngModel)]="newContent"
+    />
+    <button
+      class="btn btn-danger"
+      (click)="addTodo()"
+      [disabled]="!newName.trim() || !newContent.trim()"
+    >
+      Add
+    </button>
+  </div>
 
-<div class="waiting">
-  <h2>Waiting</h2>
-  <ul>
-    <li *ngFor="let todo of todoService.waitingTodos()">
-      {{ todo.name }} - {{ todo.content }}
-      <button (click)="changeStatus(todo.id, 'in progress')">Start</button>
-      <button (click)="changeStatus(todo.id, 'done')">Done</button>
-      <button (click)="deleteTodo(todo.id)">Delete</button>
-    </li>
-  </ul>
-</div>
+  <div class="todo-lists">
+    <div class="todo-item alert alert-secondary">
+      <h2>Waiting</h2>
+      <ul>
+        <li *ngFor="let todo of todoService.waitingTodos()">
+          <span class="todo-text">{{ todo.name }} - {{ todo.content }}</span>
+          <div class="button-group">
+            <button
+              class="btn btn-sm btn-primary"
+              (click)="changeStatus(todo.id, 'in progress')"
+            >
+              Start
+            </button>
+            <button
+              class="btn btn-sm btn-success"
+              (click)="changeStatus(todo.id, 'done')"
+            >
+              Done
+            </button>
+            <button class="btn btn-sm btn-danger" (click)="deleteTodo(todo.id)">
+              Delete
+            </button>
+          </div>
+        </li>
+      </ul>
+    </div>
 
-<div class="in-progress">
-  <h2>In Progress Todos</h2>
-  <ul>
-    <li *ngFor="let todo of todoService.inProgressTodos()">
-      {{ todo.name }} - {{ todo.content }}
-      <button (click)="changeStatus(todo.id, 'waiting')">Back to Waiting</button>
-      <button (click)="changeStatus(todo.id, 'done')">Done</button>
-      <button (click)="deleteTodo(todo.id)">Delete</button>
-    </li>
-  </ul>
-</div>
+    <div class="todo-item alert alert-warning">
+      <h2>In Progress Todos</h2>
+      <ul>
+        <li *ngFor="let todo of todoService.inProgressTodos()">
+          <span class="todo-text">{{ todo.name }} - {{ todo.content }}</span>
+          <div class="button-group">
+            <button
+              class="btn btn-sm btn-secondary"
+              (click)="changeStatus(todo.id, 'waiting')"
+            >
+              Back to Waiting
+            </button>
+            <button
+              class="btn btn-sm btn-success"
+              (click)="changeStatus(todo.id, 'done')"
+            >
+              Done
+            </button>
+            <button class="btn btn-sm btn-danger" (click)="deleteTodo(todo.id)">
+              Delete
+            </button>
+          </div>
+        </li>
+      </ul>
+    </div>
 
-<div class="done">
-  <h2>Done Todos</h2>
-  <ul>
-    <li *ngFor="let todo of todoService.doneTodos()">
-      {{ todo.name }} - {{ todo.content }}
-      <button (click)="changeStatus(todo.id, 'in progress')">Reopen</button>
-      <button (click)="deleteTodo(todo.id)">Delete</button>
-    </li>
-  </ul>
+    <div class="todo-item alert alert-success">
+      <h2>Done Todos</h2>
+      <ul>
+        <li *ngFor="let todo of todoService.doneTodos()">
+          <span class="todo-text">{{ todo.name }} - {{ todo.content }}</span>
+          <div class="button-group">
+            <button
+              class="btn btn-sm btn-warning"
+              (click)="changeStatus(todo.id, 'in progress')"
+            >
+              Reopen
+            </button>
+            <button class="btn btn-sm btn-danger" (click)="deleteTodo(todo.id)">
+              Delete
+            </button>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
 </div>

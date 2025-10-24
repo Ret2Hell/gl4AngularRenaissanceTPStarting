@@ -1,14 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { 
-  combineLatest, 
-  map, 
-  startWith, 
+import {
+  combineLatest,
+  map,
+  startWith,
   distinctUntilChanged,
   debounceTime,
   Subject,
   takeUntil,
-  Observable
+  Observable,
 } from 'rxjs';
 
 interface CalculationResults {
@@ -23,29 +23,22 @@ interface CalculationResults {
 @Component({
   selector: 'app-ttc-calculator',
   templateUrl: './ttc-calculator.component.html',
-  styleUrls: ['./ttc-calculator.component.css']
+  styleUrls: ['./ttc-calculator.component.css'],
 })
-export class TtcCalculatorComponent implements OnInit, OnDestroy {
-  
+export class TtcCalculatorComponent implements OnDestroy {
   calculatorForm: FormGroup;
-  
+
   private destroy$ = new Subject<void>();
-  
+
   calculationResults$!: Observable<CalculationResults>;
 
   constructor(private fb: FormBuilder) {
     this.calculatorForm = this.fb.group({
       unitPrice: [0, [Validators.required, Validators.min(0)]],
       quantity: [1, [Validators.required, Validators.min(1)]],
-      tva: [18, [Validators.required, Validators.min(0), Validators.max(100)]]
+      tva: [18, [Validators.required, Validators.min(0), Validators.max(100)]],
     });
     this.calculationResults$ = this.createCalculationStream();
-  }
-
-  ngOnInit(): void {
-    this.calculationResults$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe();
   }
 
   ngOnDestroy(): void {
@@ -58,21 +51,21 @@ export class TtcCalculatorComponent implements OnInit, OnDestroy {
       startWith(this.calculatorForm.get('unitPrice')!.value),
       debounceTime(300),
       distinctUntilChanged(),
-      map(value => Number(value) || 0)
+      map((value) => Number(value) || 0)
     );
 
     const quantity$ = this.calculatorForm.get('quantity')!.valueChanges.pipe(
       startWith(this.calculatorForm.get('quantity')!.value),
       debounceTime(300),
       distinctUntilChanged(),
-      map(value => Number(value) || 1)
+      map((value) => Number(value) || 1)
     );
 
     const tva$ = this.calculatorForm.get('tva')!.valueChanges.pipe(
       startWith(this.calculatorForm.get('tva')!.value),
       debounceTime(300),
       distinctUntilChanged(),
-      map(value => Number(value) || 18)
+      map((value) => Number(value) || 18)
     );
 
     return combineLatest([unitPrice$, quantity$, tva$]).pipe(
@@ -83,7 +76,7 @@ export class TtcCalculatorComponent implements OnInit, OnDestroy {
         const discountedSubtotal = subtotal - discountAmount;
         const tvaAmount = discountedSubtotal * (tva / 100);
         const ttcPrice = discountedSubtotal + tvaAmount;
-        const ttcPricePerUnit = ttcPrice / quantity;
+        const ttcPricePerUnit = quantity > 0 ? ttcPrice / quantity : 0;
 
         return {
           unitPrice,
@@ -91,21 +84,18 @@ export class TtcCalculatorComponent implements OnInit, OnDestroy {
           tva,
           discountAmount,
           ttcPrice,
-          ttcPricePerUnit
+          ttcPricePerUnit,
         } as CalculationResults;
       }),
-      distinctUntilChanged((prev, curr) => 
-        JSON.stringify(prev) === JSON.stringify(curr)
+      distinctUntilChanged(
+        (prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)
       )
     );
   }
 
   private calculateDiscount(quantity: number): number {
-    if (quantity >= 16) {
-      return 30; 
-    } else if (quantity >= 10 && quantity <= 15) {
-      return 20; 
-    }
-    return 0; 
+    if (quantity >= 16) return 30;
+    if (quantity >= 10) return 20;
+    return 0;
   }
 }

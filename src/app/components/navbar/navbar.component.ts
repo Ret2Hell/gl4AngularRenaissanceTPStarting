@@ -4,22 +4,21 @@ import { Router, RouterLinkActive, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { APP_ROUTES } from '../../../config/routes.config';
 
-
 @Component({
-    selector: 'app-navbar',
-    templateUrl: './navbar.component.html',
-    styleUrls: ['./navbar.component.css'],
-    standalone: true,
-    imports: [
-    RouterLinkActive,
-    RouterLink
-],
+  selector: 'app-navbar',
+  templateUrl: './navbar.component.html',
+  styleUrls: ['./navbar.component.css'],
+  standalone: true,
+  imports: [RouterLinkActive, RouterLink],
 })
 export class NavbarComponent {
-  authService = inject(AuthService);
+  private authService = inject(AuthService);
   private router = inject(Router);
   private toastr = inject(ToastrService);
 
+  readonly isAuthenticated = this.authService.isAuthenticated;
+
+  readonly currentUser = this.authService.currentUser;
 
   logout() {
     this.authService.logout();

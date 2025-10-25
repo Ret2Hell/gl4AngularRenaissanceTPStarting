@@ -26,11 +26,10 @@ export class TtcCalculatorComponent {
 
 
   private calculateDiscount(quantity: number): number {
-    if (quantity >= 16) {
-      return 30; 
-    } else if (quantity >= 10 && quantity <= 15) {
-      return 20; 
-    }
-    return 0; 
+    if (quantity >= 16) return 30; 
+
+    if (quantity >= 10) return 20;
+
+    return 0;
   }
 }

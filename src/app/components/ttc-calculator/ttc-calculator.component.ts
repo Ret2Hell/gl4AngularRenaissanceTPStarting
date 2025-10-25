@@ -1,6 +1,5 @@
 import { Component, signal, computed } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgClass } from '@angular/common';
 
 
 @Component({
@@ -8,7 +7,7 @@ import { NgClass } from '@angular/common';
   templateUrl: './ttc-calculator.component.html',
   styleUrls: ['./ttc-calculator.component.css'],
   standalone: true,
-  imports: [FormsModule, NgClass],
+  imports: [FormsModule],
 })
 export class TtcCalculatorComponent {
   

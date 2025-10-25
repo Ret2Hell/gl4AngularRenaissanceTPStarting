@@ -12,6 +12,7 @@ import { CvComponent } from './cv/cv/cv.component';
 import { DetailsCvComponent } from './cv/details-cv/details-cv.component';
 import { RhComponent } from './optimizationPattern/rh/rh.component';
 import { SimComponent } from './sim/sim.component';
+import { TtcCalculatorComponent } from './components/ttc-calculator/ttc-calculator.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -28,6 +29,7 @@ export const routes: Routes = [
     children: [
       { path: 'todo', component: TodoComponent },
       { path: 'word', component: MiniWordComponent },
+      { path: 'ttc', component: TtcCalculatorComponent },
     ],
   },
   {

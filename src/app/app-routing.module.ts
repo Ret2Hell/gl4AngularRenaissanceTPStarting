@@ -13,11 +13,13 @@ import { CvComponent } from "./cv/cv/cv.component";
 import { DetailsCvComponent } from "./cv/details-cv/details-cv.component";
 import { RhComponent } from "./optimizationPattern/rh/rh.component";
 import { TtcCalculatorComponent } from "./components/ttc-calculator/ttc-calculator.component";
+import { SimComponent } from "./sim/sim.component";
 
 const routes: Route[] = [
   { path: "login", component: LoginComponent },
   { path: "rh", component: RhComponent },
   { path: "ttc-calculator", component: TtcCalculatorComponent },
+  { path: "sim", component: SimComponent },
   {
     path: "cv",
     component: CvComponent,

@@ -7,6 +7,7 @@ import {
   takeWhile,
   scan,
   startWith,
+  shareReplay,
 } from "rxjs";
 import { Product } from "./dto/product.dto";
 import { ProductService } from "./services/product.service";
@@ -27,9 +28,10 @@ export class ProductsComponent {
 
   constructor(private productService: ProductService) {
     const responses$ = this.loadMore$.pipe(
-      scan((acc: Settings, _) => ({ limit: 12, skip: acc.skip + 12 }), { limit: 12, skip: 0 }),
+      scan((acc: Settings, _) => ({ limit: 12, skip: acc.skip + 12 }), { limit: 12, skip: -12 }),
       concatMap(settings => this.productService.getProducts(settings)),
-      takeWhile(response => response.skip + response.products.length < response.total, true)
+      takeWhile(response => response.skip + response.products.length < response.total, true),
+      shareReplay(1)
     );
 
     this.products$ = responses$.pipe(

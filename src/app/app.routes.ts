@@ -13,6 +13,9 @@ import { DetailsCvComponent } from './cv/details-cv/details-cv.component';
 import { RhComponent } from './optimizationPattern/rh/rh.component';
 import { SimComponent } from './sim/sim.component';
 import { TtcCalculatorComponent } from './components/ttc-calculator/ttc-calculator.component';
+import { ProductsComponent } from "./products/products.component";
+
+
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -41,5 +44,6 @@ export const routes: Routes = [
     path: 'sim',
     component: SimComponent,
   },
+  { path: "products", component: ProductsComponent },
   { path: '**', component: NF404Component },
 ];

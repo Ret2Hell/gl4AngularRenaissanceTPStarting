@@ -10,7 +10,7 @@ import { ToastrService } from "ngx-toastr";
 import { APP_ROUTES } from "src/config/routes.config";
 import { Cv } from "../model/cv";
 import { Subscription } from "rxjs";
-import { debounceTime } from "rxjs/operators";
+import { debounceTime, filter } from "rxjs/operators";
 
 @Component({
   selector: "app-add-cv",
@@ -43,10 +43,13 @@ export class AddCvComponent implements OnInit {
     }
 
     this.formSubscription.add(
-      this.form.valueChanges
-        .pipe(debounceTime(500))
-        .subscribe((formValue) => {
-          this.saveFormData(formValue);
+      this.form.statusChanges
+        .pipe(
+          debounceTime(500),
+          filter((status) => status === "VALID")
+        )
+        .subscribe(() => {
+          this.saveFormData(this.form.value);
         })
     );
   }

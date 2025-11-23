@@ -3,7 +3,6 @@
     <i class="fa fa-search"></i> Search CV by Name
   </h5>
   
-  <!-- Search Form -->
   <form [formGroup]="form" class="mb-3">
     <div class="input-group">
       <span class="input-group-text">
@@ -30,7 +29,6 @@
     </small>
   </form>
 
-  <!-- Autocomplete Suggestions -->
   <div class="suggestions-container" *ngIf="(filteredCvs$ | async) as cvs">
     <div *ngIf="cvs.length > 0" class="list-group shadow-sm">
       <button

@@ -1,3 +1,55 @@
-<form [formGroup]="form">
-  <input type="text" class="form-control" formControlName="search" />
-</form>
+<div class="autocomplete-wrapper">
+  <h5 class="mb-3">
+    <i class="fa fa-search"></i> Search CV by Name
+  </h5>
+  
+  <!-- Search Form -->
+  <form [formGroup]="form" class="mb-3">
+    <div class="input-group">
+      <span class="input-group-text">
+        <i class="fa fa-search"></i>
+      </span>
+      <input 
+        type="text" 
+        class="form-control" 
+        formControlName="search"
+        placeholder="Type a name to search..."
+        autocomplete="off"
+      />
+      <button 
+        class="btn btn-outline-secondary" 
+        type="button"
+        (click)="clearSearch()"
+        [disabled]="!search.value"
+      >
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+    <small class="form-text text-muted">
+      Start typing to see suggestions
+    </small>
+  </form>
+
+  <!-- Autocomplete Suggestions -->
+  <div class="suggestions-container" *ngIf="(filteredCvs$ | async) as cvs">
+    <div *ngIf="cvs.length > 0" class="list-group shadow-sm">
+      <button
+        *ngFor="let cv of cvs"
+        type="button"
+        class="list-group-item list-group-item-action"
+        (click)="onSelectCv(cv)"
+      >
+        <div class="d-flex w-100 align-items-center">
+          <div>
+            <h6 class="mb-1">{{ cv.firstname }} {{ cv.name }}</h6>
+            <small class="text-muted">{{ cv.job }}</small>
+          </div>
+        </div>
+      </button>
+    </div>
+    
+    <div *ngIf="cvs.length === 0 && search.value" class="alert alert-info mb-0">
+      <i class="fa fa-info-circle"></i> No CVs found matching "{{ search.value }}"
+    </div>
+  </div>
+</div>

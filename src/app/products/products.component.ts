@@ -27,7 +27,7 @@ export class ProductsComponent {
 
   constructor(private productService: ProductService) {
     const responses$ = this.loadMore$.pipe(
-      scan((acc, _) => ({ limit: 12, skip: acc.skip + 12 }), { limit: 12, skip: 0 }),
+      scan((acc: Settings, _) => ({ limit: 12, skip: acc.skip + 12 }), { limit: 12, skip: 0 }),
       concatMap(settings => this.productService.getProducts(settings)),
       takeWhile(response => response.skip + response.products.length < response.total, true)
     );

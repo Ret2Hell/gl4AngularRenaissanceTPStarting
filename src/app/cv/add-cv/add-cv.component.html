@@ -44,7 +44,7 @@
   Job: <input type="text" class="form-control" formControlName="job" /> Path:
   <input type="text" class="form-control" formControlName="path" />
 
-  <button class="btn btn-primary" (click)="addCv()">
+  <button [disabled]="form.invalid" class="btn btn-primary" (click)="addCv()">
     add cv
   </button>
 </form>

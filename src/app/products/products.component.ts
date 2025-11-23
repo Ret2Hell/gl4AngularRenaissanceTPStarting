@@ -1,18 +1,40 @@
-import { Component } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Product } from './dto/product.dto';
-import { AsyncPipe } from '@angular/common';
+import { ProductService } from './services/product.service';
 
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.css'],
   standalone: true,
-  imports: [AsyncPipe],
+  imports: [CommonModule],
 })
 export class ProductsComponent {
-  /* Todo : Faire le nécessaire pour créer le flux des produits à afficher */
-  /* Tips : vous pouvez voir les différents imports non utilisés et vous en inspirer */
-  products$!: Observable<Product[]>;
-  constructor() {}
+  products = signal<Product[]>([]);
+  skip = signal(0);
+  readonly limit = 12;
+  total: number | null = null;
+
+  constructor(private productService: ProductService) {
+    this.loadMore();
+  }
+
+  loadMore() {
+    if (this.total !== null && this.products().length >= this.total) return;
+
+    const setting = { limit: this.limit, skip: this.skip() };
+    this.productService.getProducts(setting).subscribe({
+      next: (resp) => {
+        this.products.update((p) => [...p, ...resp.products]);
+        this.skip.set(this.skip() + resp.products.length);
+        this.total = resp.total ?? this.total;
+      },
+      error: () => {}
+    });
+  }
+
+  trackById(_index: number, item: Product) {
+    return item.id;
+  }
 }

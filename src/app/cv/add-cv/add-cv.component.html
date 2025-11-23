@@ -8,17 +8,35 @@
   >
     Ce champ est obligatoire
   </div>
-  Firstname:
-  <input type="text" class="form-control" formControlName="firstname" /> Age:
-  <input type="text" class="form-control" formControlName="age" /> Cin:
-  <input type="text" class="form-control" formControlName="cin" />
+  <input type="text" class="form-control" formControlName="age" />
   <div
-    *ngIf="
-      form.errors && form.errors['cinFirstCars'] && cin?.touched && age?.touched
-    "
+    *ngIf="form.get('age')?.errors && form.get('age')?.touched"
     class="alert alert-danger"
   >
-    Cette Cin est invalide
+    Ce champ est obligatoire
+  </div>
+  Cin:
+  <input type="text" class="form-control" formControlName="cin" />
+  <div *ngIf="cin?.touched && cin?.invalid" class="alert alert-danger">
+    <div *ngIf="cin?.errors?.['required']">
+      Le CIN est obligatoire
+    </div>
+    <div *ngIf="cin?.errors?.['pattern']">
+      Le CIN doit contenir exactement 8 chiffres
+    </div>
+    <div *ngIf="cin?.errors?.['cinNotUnique']">
+      Ce CIN existe déjà dans la base de données
+    </div>
+  </div>
+  <div *ngIf="cin?.pending" class="alert alert-info">
+    Vérification de l'unicité du CIN...
+  </div>
+  <!-- Message d'erreur pour la corrélation CIN-Age au niveau du formulaire -->
+  <div
+    *ngIf="form.errors?.['cinAgeCorrelation'] && (cin?.touched || age?.touched)"
+    class="alert alert-danger"
+  >
+    {{ form.errors?.['cinAgeCorrelation'].message }}
   </div>
   Job: <input type="text" class="form-control" formControlName="job" /> Path:
   <input type="text" class="form-control" formControlName="path" />

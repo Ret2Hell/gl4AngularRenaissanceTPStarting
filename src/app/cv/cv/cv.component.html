@@ -1,12 +1,30 @@
-<div class="row">
-  <div class="col">
-    <div class="alert alert-warning">
-      {{ date | date : "full" | uppercase }}
+<div class="container-fluid">
+  <!-- Date Banner -->
+  <div class="row">
+    <div class="col-12">
+      <div class="alert alert-warning">
+        {{ date | date : "full" | uppercase }}
+      </div>
     </div>
-    <app-list [cvs]="cvs$ | async"></app-list>
   </div>
-  <div class="col">
-    <app-cv-card [cv]="selectedCv"></app-cv-card>
+
+  <!-- Search Section -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <app-autocomplete></app-autocomplete>
+    </div>
+  </div>
+
+  <!-- CV List and Card Section -->
+  <div class="row">
+    <div class="col">
+      <h4 class="mb-3">All CVs</h4>
+      <app-list [cvs]="cvs$ | async"></app-list>
+    </div>
+    <div class="col">
+      <app-cv-card [cv]="selectedCv"></app-cv-card>
+    </div>
   </div>
 </div>
+
 <app-embauche></app-embauche>

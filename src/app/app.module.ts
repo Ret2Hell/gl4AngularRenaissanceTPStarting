@@ -21,6 +21,7 @@ import { FilsComponent } from "./components/fils/fils.component";
 import { AddCvComponent } from "./cv/add-cv/add-cv.component";
 import { CvComponent } from "./cv/cv/cv.component";
 import { DetailsCvComponent } from "./cv/details-cv/details-cv.component";
+import { MasterDetailsCvComponent } from "./cv/master-details-cv/master-details-cv.component";
 
 import { NgstyleComponent } from "./directives/ngstyle/ngstyle.component";
 import { MiniWordComponent } from "./directives/mini-word/mini-word.component";
@@ -68,6 +69,7 @@ import { TtcCalculatorComponent } from "./components/ttc-calculator/ttc-calculat
     ListComponent,
     ItemComponent,
     DetailsCvComponent,
+    MasterDetailsCvComponent,
     CvCardComponent,
     CardProfilComponent,
     EmbaucheComponent,

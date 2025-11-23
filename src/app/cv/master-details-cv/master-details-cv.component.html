@@ -1,0 +1,57 @@
+<div class="container-fluid mt-4">
+  <div class="row">
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">Liste des CVs</h5>
+        </div>
+        <div class="card-body p-0">
+          <ul class="list-group list-group-flush" *ngIf="cvs$ | async as cvs">
+            <li
+              *ngFor="let cv of cvs"
+              class="list-group-item list-group-item-action"
+              routerLinkActive="active"
+              [routerLink]="['./', cv.id]"
+              style="cursor: pointer;"
+            >
+              <div class="d-flex align-items-center">
+                <img
+                  [src]="'assets/images/' + (cv.path | defaultImage)"
+                  [alt]="cv.name"
+                  class="rounded-circle me-3"
+                  style="width: 50px; height: 50px; object-fit: cover;"
+                />
+                <div>
+                  <h6 class="mb-0">{{ cv.firstname }} {{ cv.name }}</h6>
+                  <small class="text-muted">{{ cv.job }}</small>
+                </div>
+              </div>
+            </li>
+          </ul>
+          <div *ngIf="(cvs$ | async)?.length === 0" class="p-3 text-center text-muted">
+            Aucun CV disponible
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header bg-secondary text-white">
+          <h5 class="mb-0">Détails du CV</h5>
+        </div>
+        <div class="card-body">
+          <router-outlet></router-outlet>
+          
+          <ng-container *ngIf="router.url === '/cv/list'">
+            <div class="text-center text-muted py-5">
+              <i class="bi bi-person-circle" style="font-size: 4rem;"></i>
+              <h4 class="mt-3">Sélectionnez un CV</h4>
+              <p>Cliquez sur un CV dans la liste pour voir ses détails</p>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

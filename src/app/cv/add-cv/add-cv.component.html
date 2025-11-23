@@ -47,5 +47,8 @@
   <button [disabled]="form.invalid" class="btn btn-primary" (click)="addCv()">
     add cv
   </button>
+  <button type="button" class="btn btn-secondary ms-2" (click)="resetForm()">
+    Reset
+  </button>
 </form>
 {{ form.errors | json }}

@@ -20,7 +20,12 @@
 </div>
 
 @if (total === null || products().length < total) {
-  <button class="btn btn-primary" (click)="loadMore()">Load More Products</button>
+  <button class="btn btn-primary" (click)="loadMore()" [disabled]="isLoading()">
+    Load More Products
+    @if (isLoading()) {
+      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    }
+  </button>
 } @else {
   <div class="alert alert-info">All products loaded!</div>
 }

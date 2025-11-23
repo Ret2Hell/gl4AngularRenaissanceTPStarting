@@ -15,6 +15,7 @@ export class ProductsComponent {
   skip = signal(0);
   readonly limit = 12;
   total: number | null = null;
+  isLoading = signal(false);
 
   constructor(private productService: ProductService) {
     this.loadMore();
@@ -23,14 +24,18 @@ export class ProductsComponent {
   loadMore() {
     if (this.total !== null && this.products().length >= this.total) return;
 
+    this.isLoading.set(true);
     const setting = { limit: this.limit, skip: this.skip() };
     this.productService.getProducts(setting).subscribe({
       next: (resp) => {
         this.products.update((p) => [...p, ...resp.products]);
         this.skip.set(this.skip() + resp.products.length);
         this.total = resp.total ?? this.total;
+        this.isLoading.set(false);
       },
-      error: () => {}
+      error: () => {
+        this.isLoading.set(false);
+      }
     });
   }
 

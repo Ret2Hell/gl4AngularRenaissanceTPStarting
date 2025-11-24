@@ -1,29 +1,33 @@
 <div class="alert alert-warning">
   Product Number: {{ products().length }}
-  @if (total !== null) {
-    / {{ total }}
+  @if (total() !== null) {
+    / {{ total() }}
   }
 </div>
 
 <div class="row">
   @for (product of products(); track trackById($index, product)) {
-  <div class="col-4">
-    <img
-      class="rounded-circle"
-      src="{{ product.thumbnail }}"
-      width="150px"
-      height="150px"
-    />
-    {{ product.title }}
-  </div>
+    <div class="col-4">
+      <img
+        class="rounded-circle"
+        [src]="product.thumbnail"
+        width="150"
+        height="150"
+      />
+      {{ product.title }}
+    </div>
   }
 </div>
 
-@if (total === null || products().length < total) {
-  <button class="btn btn-primary" (click)="loadMore()" [disabled]="isLoading()">
+@if (total() === null || products().length < total()!) {
+  <button class="btn btn-primary"
+          (click)="loadMore()"
+          [disabled]="productResource.isLoading()">
     Load More Products
-    @if (isLoading()) {
-      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    @if (productResource.isLoading()) {
+      <span class="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"></span>
     }
   </button>
 } @else {

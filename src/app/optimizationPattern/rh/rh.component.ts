@@ -1,14 +1,16 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {User, UsersService} from "../users.service";
 import * as ChartJs from 'chart.js/auto';
+import { List } from 'immutable';
 @Component({
   selector: 'app-rh',
   templateUrl: './rh.component.html',
-  styleUrls: ['./rh.component.css']
+  styleUrls: ['./rh.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RhComponent implements OnInit {
-  oddUsers: User[];
-  evenUsers: User[];
+  oddUsers: List<User> = List();
+  evenUsers: List<User> = List();
   chart: any;
   constructor(private userService: UsersService) {
     this.oddUsers = this.userService.getOddOrEven(true);
@@ -18,13 +20,14 @@ export class RhComponent implements OnInit {
   ngOnInit(): void {
         this.createChart();
     }
-  addUser(list: User[], newUser: string) {
-    this.userService.addUser(list, newUser);
+  addUser(list: List<User>, newUser: string) {
+    return this.userService.addUser(list, newUser);
   }
   createChart(){
+    console.log('Creating chart...');
     const data = [
-      { users: 'Workers', count: this.oddUsers.length },
-      { users: 'Boss', count: this.evenUsers.length },
+      { users: 'Workers', count: this.oddUsers.size },
+      { users: 'Boss', count: this.evenUsers.size },
     ];
     this.chart = new ChartJs.Chart("MyChart",
     {

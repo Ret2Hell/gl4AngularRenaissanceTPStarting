@@ -6,7 +6,15 @@
           <h5 class="mb-0">Liste des CVs</h5>
         </div>
         <div class="card-body">
-          <app-list [cvs]="cvs$ | async"></app-list>
+          @if (cvsResource.isLoading()) {
+            <div class="text-center py-3">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Chargement...</span>
+              </div>
+            </div>
+          } @else {
+            <app-list [cvs]="cvsResource.value()"></app-list>
+          }
         </div>
       </div>
     </div>
@@ -18,14 +26,14 @@
         </div>
         <div class="card-body">
           <router-outlet></router-outlet>
-          
-          <ng-container *ngIf="router.url === '/cv/list'">
+
+          @if (showPlaceholder()) {
             <div class="text-center text-muted py-5">
               <i class="bi bi-person-circle" style="font-size: 4rem;"></i>
               <h4 class="mt-3">Sélectionnez un CV</h4>
               <p>Cliquez sur un CV dans la liste pour voir ses détails</p>
             </div>
-          </ng-container>
+          }
         </div>
       </div>
     </div>

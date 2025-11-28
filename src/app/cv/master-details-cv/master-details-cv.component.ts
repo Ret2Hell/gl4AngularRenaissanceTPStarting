@@ -1,26 +1,44 @@
-import { Component, OnInit, effect } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
+import { Component, effect, resource, untracked, computed } from '@angular/core';
+import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
 import { Cv } from '../model/cv';
 import { CvService } from '../services/cv.service';
-import { Observable, catchError, of } from 'rxjs';
+import { firstValueFrom, filter } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
-import { CommonModule } from '@angular/common';
 import { ListComponent } from '../list/list.component';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-master-details-cv',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, ListComponent],
+  imports: [RouterOutlet, ListComponent],
   templateUrl: './master-details-cv.component.html',
   styleUrls: ['./master-details-cv.component.css']
 })
-export class MasterDetailsCvComponent implements OnInit {
-  cvs$!: Observable<Cv[]>;
+export class MasterDetailsCvComponent {
+  cvsResource = resource<Cv[], void>({
+    loader: () => untracked(() =>
+      firstValueFrom(this.cvService.getCvs()).catch(() => {
+        this.toastr.error(`
+          Attention!! Les données sont fictives, problème avec le serveur.
+          Veuillez contacter l'admin.`);
+        return this.cvService.getFakeCvs();
+      })
+    ),
+  });
+
+  private navigationEnd = toSignal(
+    this.router.events.pipe(filter(e => e instanceof NavigationEnd))
+  );
+
+  showPlaceholder = computed(() => {
+    this.navigationEnd(); // Track navigation changes
+    return this.router.url === '/cv/list';
+  });
 
   constructor(
     private cvService: CvService,
     private toastr: ToastrService,
-    public router: Router
+    private router: Router
   ) {
     effect(() => {
       const selectedCv = this.cvService.selectedCv();
@@ -28,16 +46,5 @@ export class MasterDetailsCvComponent implements OnInit {
         this.router.navigate(['/cv/list', selectedCv.id]);
       }
     });
-  }
-
-  ngOnInit(): void {
-    this.cvs$ = this.cvService.getCvs().pipe(
-      catchError(() => {
-        this.toastr.error(`
-          Attention!! Les données sont fictives, problème avec le serveur.
-          Veuillez contacter l'admin.`);
-        return of(this.cvService.getFakeCvs());
-      })
-    );
   }
 }

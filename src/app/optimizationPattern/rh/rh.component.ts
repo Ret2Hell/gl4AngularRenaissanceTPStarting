@@ -29,7 +29,16 @@ export class RhComponent implements OnInit {
     } else {
       this.evenUsers = this.evenUsers.unshift(user);
     }
+    this.updateChart();
   }
+
+  updateChart() {
+    this.ngzone.runOutsideAngular(() => {
+      this.chart.data.datasets[0].data = [this.oddUsers.size, this.evenUsers.size];
+      this.chart.update();
+    });
+  }
+
   createChart(){
     const data = [
       { users: 'Workers', count: this.oddUsers.size },

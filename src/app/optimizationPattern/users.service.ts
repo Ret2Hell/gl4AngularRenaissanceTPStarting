@@ -22,9 +22,9 @@ export class UsersService {
     return this.users.filter((user) => !!(user.age % 2) == isOdd );
   }
   addUser(list: List<User>, name: string) {
-    return list.unshift({
+    return {
       name,
       age: faker.datatype.number({min: 18, max: 30})
-    });
+    };
   }
 }

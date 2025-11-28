@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit, NgZone} from '@angular/core';
 import {User, UsersService} from "../users.service";
 import * as ChartJs from 'chart.js/auto';
 import { List } from 'immutable';
@@ -12,19 +12,25 @@ export class RhComponent implements OnInit {
   oddUsers: List<User> = List();
   evenUsers: List<User> = List();
   chart: any;
-  constructor(private userService: UsersService) {
+  constructor(private userService: UsersService, private ngzone: NgZone) {
     this.oddUsers = this.userService.getOddOrEven(true);
     this.evenUsers = this.userService.getOddOrEven();
   }
 
   ngOnInit(): void {
+      this.ngzone.runOutsideAngular(() => {
         this.createChart();
+    });
     }
   addUser(list: List<User>, newUser: string) {
-    return this.userService.addUser(list, newUser);
+    const user = this.userService.addUser(list, newUser);
+    if (user.age % 2) {
+      this.oddUsers = this.oddUsers.unshift(user);
+    } else {
+      this.evenUsers = this.evenUsers.unshift(user);
+    }
   }
   createChart(){
-    console.log('Creating chart...');
     const data = [
       { users: 'Workers', count: this.oddUsers.size },
       { users: 'Boss', count: this.evenUsers.size },

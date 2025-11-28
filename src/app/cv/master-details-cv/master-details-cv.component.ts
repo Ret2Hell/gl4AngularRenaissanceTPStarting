@@ -1,12 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { Cv } from '../model/cv';
 import { CvService } from '../services/cv.service';
 import { Observable, catchError, of } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { CommonModule } from '@angular/common';
+import { DefaultImagePipe } from '../pipes/default-image.pipe';
 
 @Component({
   selector: 'app-master-details-cv',
+  standalone: true,
+  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, DefaultImagePipe],
   templateUrl: './master-details-cv.component.html',
   styleUrls: ['./master-details-cv.component.css']
 })

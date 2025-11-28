@@ -10,11 +10,10 @@ import { CvService } from '../services/cv.service';
 import { Cv } from '../model/cv';
 
 @Component({
-  selector: 'app-autocomplete',
-  templateUrl: './autocomplete.component.html',
-  styleUrls: ['./autocomplete.component.css'],
-  standalone: true,
-  imports: [FormsModule, ReactiveFormsModule],
+    selector: 'app-autocomplete',
+    templateUrl: './autocomplete.component.html',
+    styleUrls: ['./autocomplete.component.css'],
+    imports: [FormsModule, ReactiveFormsModule]
 })
 export class AutocompleteComponent {
   formBuilder = inject(FormBuilder);

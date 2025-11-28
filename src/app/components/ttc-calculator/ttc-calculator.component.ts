@@ -3,11 +3,10 @@ import { FormsModule } from '@angular/forms';
 
 
 @Component({
-  selector: 'app-ttc-calculator',
-  templateUrl: './ttc-calculator.component.html',
-  styleUrls: ['./ttc-calculator.component.css'],
-  standalone: true,
-  imports: [FormsModule],
+    selector: 'app-ttc-calculator',
+    templateUrl: './ttc-calculator.component.html',
+    styleUrls: ['./ttc-calculator.component.css'],
+    imports: [FormsModule]
 })
 export class TtcCalculatorComponent {
   

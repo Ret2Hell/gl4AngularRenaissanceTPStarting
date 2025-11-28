@@ -4,11 +4,10 @@ import { NgClass } from '@angular/common';
 import { ItemComponent } from '../item/item.component';
 
 @Component({
-  selector: 'app-list',
-  templateUrl: './list.component.html',
-  styleUrls: ['./list.component.css'],
-  standalone: true,
-  imports: [NgClass, ItemComponent],
+    selector: 'app-list',
+    templateUrl: './list.component.html',
+    styleUrls: ['./list.component.css'],
+    imports: [NgClass, ItemComponent]
 })
 export class ListComponent {
   @Input() set cvs(value: Cv[] | null) {

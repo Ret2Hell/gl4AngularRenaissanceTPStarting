@@ -9,17 +9,16 @@ import { EmbaucheComponent } from '../embauche/embauche.component';
 import { UpperCasePipe, DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'app-cv',
-  templateUrl: './cv.component.html',
-  styleUrls: ['./cv.component.css'],
-  standalone: true,
-  imports: [
-    ListComponent,
-    CvCardComponent,
-    EmbaucheComponent,
-    UpperCasePipe,
-    DatePipe,
-  ],
+    selector: 'app-cv',
+    templateUrl: './cv.component.html',
+    styleUrls: ['./cv.component.css'],
+    imports: [
+        ListComponent,
+        CvCardComponent,
+        EmbaucheComponent,
+        UpperCasePipe,
+        DatePipe,
+    ]
 })
 export class CvComponent {
   private logger = inject(LoggerService);

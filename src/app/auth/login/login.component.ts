@@ -7,11 +7,10 @@ import { APP_ROUTES } from '../../../config/routes.config';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
-  standalone: true,
-  imports: [FormsModule],
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.css'],
+    imports: [FormsModule]
 })
 export class LoginComponent {
   private authService = inject(AuthService);

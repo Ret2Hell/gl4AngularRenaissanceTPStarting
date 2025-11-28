@@ -1,16 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Component, OnInit, effect } from '@angular/core';
+import { Router, RouterOutlet } from '@angular/router';
 import { Cv } from '../model/cv';
 import { CvService } from '../services/cv.service';
 import { Observable, catchError, of } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
-import { DefaultImagePipe } from '../pipes/default-image.pipe';
+import { ListComponent } from '../list/list.component';
 
 @Component({
   selector: 'app-master-details-cv',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, DefaultImagePipe],
+  imports: [CommonModule, RouterOutlet, ListComponent],
   templateUrl: './master-details-cv.component.html',
   styleUrls: ['./master-details-cv.component.css']
 })
@@ -21,7 +21,14 @@ export class MasterDetailsCvComponent implements OnInit {
     private cvService: CvService,
     private toastr: ToastrService,
     public router: Router
-  ) {}
+  ) {
+    effect(() => {
+      const selectedCv = this.cvService.selectedCv();
+      if (selectedCv) {
+        this.router.navigate(['/cv/list', selectedCv.id]);
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.cvs$ = this.cvService.getCvs().pipe(

@@ -31,7 +31,7 @@ export class MasterDetailsCvComponent {
   );
 
   showPlaceholder = computed(() => {
-    this.navigationEnd(); // Track navigation changes
+    this.navigationEnd();
     return this.router.url === '/cv/list';
   });
 

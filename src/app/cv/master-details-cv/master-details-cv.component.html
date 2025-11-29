@@ -13,7 +13,7 @@
               </div>
             </div>
           } @else {
-            <app-list [cvs]="cvsResource.value()"></app-list>
+            <app-list [cvs]="cvsResource.value() ?? null"></app-list>
           }
         </div>
       </div>

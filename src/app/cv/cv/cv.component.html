@@ -3,7 +3,15 @@
     <div class="alert alert-warning">
       {{ date | date : "full" | uppercase }}
     </div>
-    <app-list [cvs]="cvs()"></app-list>
+    @if (cvsResource.isLoading()) {
+      <div class="text-center py-3">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Chargement...</span>
+        </div>
+      </div>
+    } @else {
+      <app-list [cvs]="cvsResource.value() ?? null"></app-list>
+    }
   </div>
   <div class="col">
     <app-cv-card [cv]="selectedCv()"></app-cv-card>

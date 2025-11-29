@@ -1,4 +1,4 @@
-import { Component, inject, signal, effect } from '@angular/core';
+import { Component, inject, effect, resource, untracked } from '@angular/core';
 import { Cv } from '../model/cv';
 import { LoggerService } from '../../services/logger.service';
 import { ToastrService } from 'ngx-toastr';
@@ -7,6 +7,7 @@ import { ListComponent } from '../list/list.component';
 import { CvCardComponent } from '../cv-card/cv-card.component';
 import { EmbaucheComponent } from '../embauche/embauche.component';
 import { UpperCasePipe, DatePipe } from '@angular/common';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
     selector: 'app-cv',
@@ -23,21 +24,30 @@ import { UpperCasePipe, DatePipe } from '@angular/common';
 export class CvComponent {
   private logger = inject(LoggerService);
   private toastr = inject(ToastrService);
-  cvService = inject(CvService);
+  private cvService = inject(CvService);
 
-  cvs = signal<Cv[]>([]);
+  cvsResource = resource<Cv[], void>({
+    loader: () => untracked(() =>
+      firstValueFrom(this.cvService.getCvs()).catch(() => {
+        this.toastr.error(`
+          Attention!! Les données sont fictives, problème avec le serveur.
+          Veuillez contacter l'admin.`);
+        return this.cvService.getFakeCvs();
+      })
+    ),
+  });
 
   selectedCv = this.cvService.selectedCv;
 
   date = new Date();
 
   constructor() {
-    effect(
-      () => {
-        this.loadCvs();
-      },
-      { allowSignalWrites: true }
-    );
+    effect(() => {
+      const cvs = this.cvsResource.value();
+      if (cvs) {
+        this.cvService.setCvList(cvs);
+      }
+    });
 
     effect(() => {
       const cv = this.selectedCv();
@@ -48,22 +58,5 @@ export class CvComponent {
 
     this.logger.logger('je suis le cvComponent');
     this.toastr.info('Bienvenu dans notre CvTech');
-  }
-
-  private loadCvs() {
-    this.cvService.getCvs().subscribe({
-      next: (cvs) => {
-        this.cvs.set(cvs);
-        this.cvService.setCvList(cvs);
-      },
-      error: () => {
-        const fakeCvs = this.cvService.getFakeCvs();
-        this.cvs.set(fakeCvs);
-        this.cvService.setCvList(fakeCvs);
-        this.toastr.error(`
-          Attention!! Les données sont fictives, problème avec le serveur.
-          Veuillez contacter l'admin.`);
-      },
-    });
   }
 }
